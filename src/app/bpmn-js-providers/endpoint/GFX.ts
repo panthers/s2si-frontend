@@ -1,0 +1,1 @@
+export const dataURL: string = 'data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M256%208C119%208%208%20119%208%20256s111%20248%20248%20248%20248-111%20248-248S393%208%20256%208z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E';
