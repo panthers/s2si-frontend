@@ -1,0 +1,50 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #lnav mode="over" role="navigation" class="menu-nav">
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
+      <div class="cp-spacer-h10px"></div>
+      <s2si-avatar size="5" [fullname]="'Jayant P Saikia'" [smallCdn]=""></s2si-avatar>
+      <div class="cp-spacer-h10px"></div>
+      <div>
+        <h1 class="mat-typography">Jayant P Saikia</h1>
+        <h1 class="mat-typography">jay.saikia@gmail.com</h1>
+      </div>
+      <div class="cp-spacer-h10px"></div>
+    </div>
+    <mat-nav-list>
+      <a mat-list-item routerLink="default" (click)="lnav.toggle()" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        Dashboard
+      </a>
+      <a mat-list-item routerLink="flows" (click)="lnav.toggle()" routerLinkActive="active">
+        <mat-icon>school</mat-icon>
+        Flows
+      </a>
+      <a mat-list-item routerLink="systems" (click)="lnav.toggle()" routerLinkActive="active">
+        <mat-icon>local_library</mat-icon>
+        Systems
+      </a>
+      <a mat-list-item routerLink="/login" (click)="lnav.toggle()" routerLinkActive="active">
+        <mat-icon>power_settings_new</mat-icon>
+        Logout
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="mat-elevation-z6">
+      <button *ngIf="!showBack" mat-icon-button (click)="lnav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button *ngIf="showBack" mat-icon-button (click)="onBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="cp-spacer-h10px"></div>
+      <img src="assets/img/png/logo_h60px.png" height="30px" routerLink="/home/default" class="logo">
+      <div class="cp-spacer-fill"></div>
+      <button mat-icon-button routerLink="help-website">
+        <mat-icon>help</mat-icon>
+      </button>
+    </mat-toolbar>
+    <div class="toolbar-space"></div>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

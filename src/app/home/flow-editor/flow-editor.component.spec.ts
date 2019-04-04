@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlowBuilderComponent } from './flow-builder.component';
+import { FlowEditorComponent } from './flow-editor.component';
 
-describe('FlowBuilderComponent', () => {
-  let component: FlowBuilderComponent;
-  let fixture: ComponentFixture<FlowBuilderComponent>;
+describe('FlowEditorComponent', () => {
+  let component: FlowEditorComponent;
+  let fixture: ComponentFixture<FlowEditorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FlowBuilderComponent ]
+      declarations: [ FlowEditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FlowBuilderComponent);
+    fixture = TestBed.createComponent(FlowEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,16 @@
+div.scr {
+    padding: 0 16px;
+    width: 100%;
+}
+mat-list {
+    .mat-list-item:nth-child(odd){
+        background-color: rgb(242, 242, 242);
+    }
+    .mat-list-item:hover {
+        background-color: #d7d7d7;
+    }
+    .mat-icon-button {
+        border: 1px solid #673ab7;
+        line-height: 20px;
+    }
+}

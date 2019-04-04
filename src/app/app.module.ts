@@ -3,16 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FlowBuilderComponent } from './flow-builder/flow-builder.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HomeModule } from './home/home.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FlowBuilderComponent
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
+    HomeModule,
     HttpClientModule,
     AppRoutingModule
   ],

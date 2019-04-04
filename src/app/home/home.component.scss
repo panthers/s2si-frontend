@@ -1,0 +1,47 @@
+mat-sidenav-container {
+    mat-toolbar {
+        z-index: 3;
+        position: fixed;
+        height: 50px;
+        .logo {
+            cursor: pointer;
+            outline: none;
+            border: 0;
+        }
+    }
+    .toolbar-space {
+        height: 50px;
+    }
+    mat-sidenav {
+        width: 250px;
+        mat-icon {
+            margin-right: 10px;
+        }
+        h1 {
+            margin-left: 8px;
+        }
+    }
+    .menu-nav {
+        background-color: #673ab7;
+        .mat-list-item {
+            color: white;
+        }
+        div.header {
+            height: 80px;
+            background-color: rgba(0,0,0,0.2);
+            h1 {
+                margin: 0;
+                color: white;
+            }
+        }
+        .active {
+            background: rgba(0,0,0,.2) !important; 
+        }
+    }
+}
+// Performance fix for mobile webview
+@media screen and (max-width: 599px) {
+    mat-sidenav {
+        box-shadow: none !important;
+    }
+}

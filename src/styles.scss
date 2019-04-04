@@ -1,1 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body, h1, h2, h3, h4, h5, h6, p { margin: 0; }
+
+/* This div will be a full window div, use as a container or to set background images */
+.def-txt-color {
+    color: #666;
+}
+div.full-body-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.cp-spacer-fill {
+    flex-grow: 1;
+}
+
+.cp-spacer-h10px {
+    width: 10px;
+}
+
+.cp-spacer-v10px {
+    height: 10px;
+}
+
+.cp-fullscreen-dialog {
+    > mat-dialog-container {
+        padding: 0px;
+    }
+}
+
+/* BPMN JS Styling */
+.bjs-powered-by {
+    display: none;
+}
+.djs-palette .entry > img {
+    width: calc(100% - 16px);
+}
