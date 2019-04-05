@@ -1,8 +1,9 @@
 import { IPalette, IPaletteProvider } from '../../_helper/bpmn-js';
+import { GfxDataURL } from '../_gfx/gfx.service';
 
 export class PaletteProvider implements IPaletteProvider {
 
-  static $inject = ['palette', 'create', 'elementFactory', 'bpmnFactory'];
+  static $inject = ['palette', 'originalPaletteProvider', 'create', 'elementFactory', 'bpmnFactory'];
 
   private readonly create: any;
   private readonly elementFactory: any;
@@ -13,7 +14,7 @@ export class PaletteProvider implements IPaletteProvider {
   // I guess since this component is injected, and it requires an instance of originalPaletteProvider,
   // originalPaletteProvider will be new'ed and thus call palette.registerProvider for itself.
   // There probably is a better way.
-  constructor(private palette: IPalette, create, elementFactory, bpmnFactory) {
+  constructor(private palette: IPalette, private originalPaletteProvider: IPaletteProvider, create, elementFactory, bpmnFactory) {
     // console.log(this.constructor.name, "constructing", palette, originalPaletteProvider);
     palette.registerProvider(this);
     this.create = create;
@@ -22,7 +23,30 @@ export class PaletteProvider implements IPaletteProvider {
   }
 
   getPaletteEntries() {
-    return { };
+    return {
+      'create.Polling': {
+        group: 'activity',
+        title: 'Create Polling',
+        // className: ['fa-save', 'fa'],
+        imageUrl: GfxDataURL.polling,
+        action: {
+          dragstart: (evt) => this.createTask(evt),
+          click: (evt) => this.createTask(evt)
+        }
+      }
+    };
   }
 
+  createTask(event) {
+    const businessObject = this.bpmnFactory.create('bpmn:Task');
+    businessObject.type = 'polling';
+
+    const shape = this.elementFactory.create(
+      'shape', {
+        type: 'bpmn:Task',
+        businessObject
+      }
+    );
+    this.create.start(event, shape);
+  }
 }

@@ -17,7 +17,7 @@ export class Renderer extends BaseRenderer {
             return;
         }
         const businessObject = getBusinessObject(element);
-        return businessObject.type === 'endpoint';
+        return businessObject.type === 'polling';
     }
 
     drawShape(parent, shape) {
@@ -26,7 +26,7 @@ export class Renderer extends BaseRenderer {
             y: 0,
             width: shape.width,
             height: shape.height,
-            href: GfxDataURL.endpoint
+            href: GfxDataURL.polling
         });
         svgAppend(parent, gfxSvg);
         return gfxSvg;

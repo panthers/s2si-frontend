@@ -4,7 +4,6 @@ import { HomeComponent } from './home.component';
 import { LandingComponent } from './landing/landing.component';
 import { FlowsComponent } from './flows/flows.component';
 import { SystemsComponent } from './systems/systems.component';
-import { FlowBuilderComponent } from './flow-builder/flow-builder.component';
 import { FlowEditorComponent } from './flow-editor/flow-editor.component';
 import { FlowViewerComponent } from './flow-viewer/flow-viewer.component';
 

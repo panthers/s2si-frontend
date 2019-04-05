@@ -1,5 +1,5 @@
 import { IPalette, IPaletteProvider } from '../../_helper/bpmn-js';
-import * as gfx from './GFX';
+import { GfxDataURL } from '../_gfx/gfx.service';
 
 export class PaletteProvider implements IPaletteProvider {
 
@@ -28,7 +28,7 @@ export class PaletteProvider implements IPaletteProvider {
         group: 'activity',
         title: 'Create System',
         // className: ['fa-save', 'fa'],
-        imageUrl: gfx.dataURL,
+        imageUrl: GfxDataURL.system,
         action: {
           dragstart: (evt) => this.createTask(evt),
           click: (evt) => this.createTask(evt)

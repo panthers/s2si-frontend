@@ -1,7 +1,7 @@
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
 import { append as svgAppend, create as svgCreate } from 'tiny-svg';
-import * as gfx from './GFX';
+import { GfxDataURL } from '../_gfx/gfx.service';
 
 export class Renderer extends BaseRenderer {
 
@@ -25,7 +25,7 @@ export class Renderer extends BaseRenderer {
             y: 0,
             width: shape.width,
             height: shape.height,
-            href: gfx.dataURL
+            href: GfxDataURL.system
         });
         svgAppend(parent, gfxSvg);
         return gfxSvg;

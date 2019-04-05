@@ -12,6 +12,7 @@ import { SystemModule } from '../../bpmn-js-providers/system/module';
 import { QueueModule } from '../../bpmn-js-providers/queue/module';
 import { TransformerModule } from '../../bpmn-js-providers/transformer/module';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { PollingModule } from 'src/app/bpmn-js-providers/polling/module';
 
 @Component({
   selector: 's2si-flow-viewer',
@@ -45,8 +46,9 @@ export class FlowViewerComponent implements OnInit {
         { originalPaletteProvider: ['type', PaletteProvider] },
         { paletteProvider: ['type', PaletteProvider] },
         // { endpointPaletteProvider: ['type', EndpointPaletteProvider] },
-        EndpointModule,
         SystemModule,
+        EndpointModule,
+        PollingModule,
         QueueModule,
         TransformerModule
       ],

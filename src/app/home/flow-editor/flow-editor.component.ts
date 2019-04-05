@@ -11,6 +11,7 @@ import { EndpointModule } from '../../bpmn-js-providers/endpoint/module';
 import { SystemModule } from '../../bpmn-js-providers/system/module';
 import { QueueModule } from '../../bpmn-js-providers/queue/module';
 import { TransformerModule } from '../../bpmn-js-providers/transformer/module';
+import { PollingModule } from '../../bpmn-js-providers/polling/module';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -45,8 +46,9 @@ export class FlowEditorComponent implements OnInit {
         { originalPaletteProvider: ['type', PaletteProvider] },
         { paletteProvider: ['type', PaletteProvider] },
         // { endpointPaletteProvider: ['type', EndpointPaletteProvider] },
-        EndpointModule,
         SystemModule,
+        EndpointModule,
+        PollingModule,
         QueueModule,
         TransformerModule
       ],
