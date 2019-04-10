@@ -1,10 +1,12 @@
-<mat-toolbar class="mat-elevation-z6">
+<mat-toolbar class="mat-elevation-z6" [class.propsExpanded]="propertiesPanelOpen">
   <div class="cp-spacer-fill"></div>
   <button mat-raised-button color="primary" (click)="draft()"><mat-icon>save_alt</mat-icon>Draft</button>
   <div class="cp-spacer-h10px"></div>
   <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon>Save</button>
+  <button *ngIf="propertiesPanelOpen" mat-icon-button (click)="propsCollapse()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+  <button *ngIf="!propertiesPanelOpen" mat-icon-button (click)="propsExpand()"><mat-icon>keyboard_arrow_left</mat-icon></button>
 </mat-toolbar>
 <div class="modeler">
   <div id="canvas"></div>
-  <div id="properties"></div>
+  <div id="properties" class="bpmnProps" [style.display]="propertiesPanelOpen ? '' : 'none'"></div>
 </div>

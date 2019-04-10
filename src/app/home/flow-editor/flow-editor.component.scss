@@ -1,14 +1,7 @@
-#properties {
-    position: absolute;
-    top: 50px;
-    bottom: 0;
-    right: 0;
-    width: 260px;
-    z-index: 2;
-    border-left: 1px solid #ccc;
-    overflow: auto;
-}
 mat-toolbar {
     height: 50px;
+    max-width: 100%;
+}
+mat-toolbar.propsExpanded {
     max-width: calc(100% - 260px);
 }

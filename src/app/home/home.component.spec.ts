@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
+import { AppMaterialModuleForSpec } from '../app-material-for-spec.module';
+import { AvatarComponent } from './avatar/avatar.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -8,7 +11,8 @@ describe('HomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
+      imports: [ AppMaterialModuleForSpec, RouterTestingModule ],
+      declarations: [ HomeComponent, AvatarComponent ]
     })
     .compileComponents();
   }));

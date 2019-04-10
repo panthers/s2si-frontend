@@ -40,7 +40,6 @@ import { AvatarComponent } from './avatar/avatar.component';
 import { FlowsComponent } from './flows/flows.component';
 import { SystemsComponent } from './systems/systems.component';
 import { FlowEditorComponent } from './flow-editor/flow-editor.component';
-import { FlowViewerComponent } from './flow-viewer/flow-viewer.component';
 
 @NgModule({
   declarations: [
@@ -49,8 +48,7 @@ import { FlowViewerComponent } from './flow-viewer/flow-viewer.component';
     LandingComponent,
     FlowsComponent,
     SystemsComponent,
-    FlowEditorComponent,
-    FlowViewerComponent
+    FlowEditorComponent
   ],
   imports: [
     CommonModule,

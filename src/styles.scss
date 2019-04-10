@@ -43,3 +43,22 @@ div.full-body-container {
 .djs-palette .entry > img {
     width: calc(100% - 16px);
 }
+.bpmnProps {
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    z-index: 2;
+    border-left: 1px solid #ccc;
+    overflow: auto;
+    * {
+        font-family: Roboto,"Helvetica Neue",sans-serif
+    }
+    .bpp-properties-panel {
+        height: 100%;
+        .bpp-properties-header > div.label {
+            display: none;
+        }
+    }
+}

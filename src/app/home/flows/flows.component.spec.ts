@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FlowsComponent } from './flows.component';
+import { AppMaterialModuleForSpec } from 'src/app/app-material-for-spec.module';
 
 describe('FlowsComponent', () => {
   let component: FlowsComponent;
@@ -8,6 +9,7 @@ describe('FlowsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ AppMaterialModuleForSpec ],
       declarations: [ FlowsComponent ]
     })
     .compileComponents();

@@ -5,7 +5,6 @@ import { LandingComponent } from './landing/landing.component';
 import { FlowsComponent } from './flows/flows.component';
 import { SystemsComponent } from './systems/systems.component';
 import { FlowEditorComponent } from './flow-editor/flow-editor.component';
-import { FlowViewerComponent } from './flow-viewer/flow-viewer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -27,12 +26,8 @@ const routes: Routes = [
         component: FlowsComponent
       },
       {
-        path: 'flows/edit/:id',
+        path: 'flows/:do/:id',
         component: FlowEditorComponent
-      },
-      {
-        path: 'flows/view/:id',
-        component: FlowViewerComponent
       },
       {
         path: 'systems',

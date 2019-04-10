@@ -1,6 +1,5 @@
 // import _Modeler from 'bpmn-js/lib/Modeler.js';
 import * as _Modeler from 'bpmn-js/dist/bpmn-modeler.production.min.js';
-import * as _Viewer from 'bpmn-js/dist/bpmn-viewer.production.min.js';
 import * as _PropertiesPanelModule from 'bpmn-js-properties-panel';
 import * as _BpmnPropertiesProvider from 'bpmn-js-properties-panel/lib/provider/bpmn';
 import * as _EntryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
@@ -18,7 +17,6 @@ export const InjectionNames = {
 };
 
 export const Modeler = _Modeler;
-export const Viewer = _Viewer;
 export const PropertiesPanelModule = _PropertiesPanelModule;
 export const EntryFactory = _EntryFactory;
 export const OriginalPaletteProvider = _PaletteProvider;
@@ -36,7 +34,4 @@ export interface IPropertiesProvider {
   getTabs(elemnt): any;
 }
 
-export interface IRenderer {
-  canRender(element): any;
-  drawShape(parent, shape): any;
-}
+
