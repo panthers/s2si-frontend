@@ -15,6 +15,7 @@ import { PollingModule } from '../../bpmn-js-providers/polling/module';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ReadOnly } from 'src/app/bpmn-js-providers/_generic/ReadOnly';
 import { Subscription } from 'rxjs';
+import { PropsRendererService } from 'src/app/_services/props-renderer.service';
 
 @Component({
   selector: 's2si-flow-editor',
@@ -23,6 +24,8 @@ import { Subscription } from 'rxjs';
 })
 export class FlowEditorComponent implements OnInit, OnDestroy {
 
+  flowNameSub: Subscription;
+  flowName: string;
   routeSub: Subscription;
   bpmnModeler: any;
   canvasHeight = 600;
@@ -31,14 +34,19 @@ export class FlowEditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private flowService: FlowService
+    private flowService: FlowService,
+    private propsRendererService: PropsRendererService
   ) { }
 
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
+    this.flowNameSub.unsubscribe();
   }
 
   ngOnInit() {
+    this.flowNameSub = this.flowService.flowNameEmitter.subscribe(name => {
+      this.flowName = name;
+    });
     // Init BPMN Modeler
     this.initBPMN();
     this.routeSub = this.route.paramMap.subscribe((params: ParamMap) => {
@@ -70,6 +78,7 @@ export class FlowEditorComponent implements OnInit, OnDestroy {
 
   wireBPMNModules(): void {
     PropertiesProvider.prototype.setFlowService(this.flowService);
+    PropertiesProvider.prototype.setPropsRendererService(this.propsRendererService);
   }
 
   initBPMN(): void {

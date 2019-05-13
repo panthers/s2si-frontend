@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
+import * as $ from 'jquery';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +17,53 @@ export class FlowService {
     },
     types: [
       {
-        name: 'Type',
+        name: 'Process attributes',
+        extends: [ 'bpmn:Process' ],
+        properties: [
+          {
+            name: 'fname',
+            isAttr: true,
+            type: 'String'
+          },
+          {
+            name: 'fdesc',
+            isAttr: true,
+            type: 'String'
+          }
+        ]
+      },
+      {
+        name: 'Task attributes',
         extends: [ 'bpmn:Task' ],
         properties: [
           {
             name: 'type',
+            isAttr: true,
+            type: 'String'
+          },
+          {
+            name: 'queue_name',
+            isAttr: true,
+            type: 'String'
+          },
+          {
+            name: 'transformer_type',
+            isAttr: true,
+            type: 'String'
+          },
+          {
+            name: 'transformer_xslt_template',
+            isAttr: true,
+            type: 'String'
+          }
+        ]
+      },
+      {
+        name: 'QueueAttributes',
+        superClass: [ 'Element' ],
+        properties: [
+          {
+            name: 'name',
             isAttr: true,
             type: 'String'
           }
@@ -38,7 +82,7 @@ export class FlowService {
         'xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" ' +
         'targetNamespace="http://bpmn.io/schema/bpmn" ' +
         'id="Definitions_1">' +
-    '<bpmn:process id="Process_1" isExecutable="false">' +
+    '<bpmn:process id="Process_1" isExecutable="false" s2si:fname="New flow">' +
     '</bpmn:process>' +
     '<bpmndi:BPMNDiagram id="BPMNDiagram_1">' +
       '<bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">' +
@@ -55,7 +99,7 @@ export class FlowService {
         'xmlns:s2si="http://s2si.com" ' +
         'xmlns:di="http://www.omg.org/spec/DD/20100524/DI" ' +
         'id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">' +
-    '<bpmn:process id="Process_1" isExecutable="false">' +
+    '<bpmn:process id="Process_1" isExecutable="false" s2si:fname="abcd">' +
       '<bpmn:task id="Task_0m3ifup" s2si:type="system">' +
         '<bpmn:outgoing>SequenceFlow_09ag6c3</bpmn:outgoing>' +
       '</bpmn:task>' +
@@ -174,7 +218,11 @@ export class FlowService {
     '</bpmndi:BPMNDiagram>' +
   '</bpmn:definitions>';
 
-  constructor() { }
+  public flowNameEmitter: EventEmitter<string>;
+
+  constructor() {
+    this.flowNameEmitter = new EventEmitter();
+  }
 
   s2si(): any {
     return this.s2siPackage;
@@ -193,5 +241,49 @@ export class FlowService {
       // Put http code here, until then return empty flow xml
       return this.loadEmptyFlow();
     }
+  }
+
+  /**
+   * eventBus handlers
+   */
+  rootAdded(event: any): void {
+    const element = event.element;
+    if (is(element, 'bpmn:Process') && getBusinessObject(element).fname) {
+      this.flowNameEmitter.emit(getBusinessObject(element).fname);
+    }
+  }
+
+  elementsChanged(event: any): void {
+    event.elements.forEach(element => {
+      if (is(element, 'bpmn:Process') && getBusinessObject(element).fname) {
+        this.flowNameEmitter.emit(getBusinessObject(element).fname);
+      }
+    });
+  }
+
+  getTransformerTypes(): any {
+    const types = [];
+    types.push({ value: '', name: 'Select a value'});
+    types.push({ value: 'XSLT', name: 'XSLT Transformer'});
+    return types;
+  }
+
+  /**
+   * Write all synchronous jQuery calls below, someday will come when we will change this.
+   * jQuery yuckkk, synchronous yuckkk
+   */
+  getSystemsInSyncMode(): any {
+    const systems = [];
+    $.ajax({
+      url: 'https://jsonplaceholder.typicode.com/todos/1',
+      method : 'GET',
+      success: (result) => {
+        systems.push({ value: '', name: 'Select a value'});
+        systems.push({ value: 'one', name: 'one'});
+        systems.push({ value: 'two', name: 'two' });
+      },
+      async: false
+    });
+    return systems;
   }
 }

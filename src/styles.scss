@@ -60,5 +60,14 @@ div.full-body-container {
         .bpp-properties-header > div.label {
             display: none;
         }
+        span.group-label {
+            font-style: normal;
+        }
+        .entry-para {
+            white-space: pre-wrap;
+            font-size: 80%;
+            font-weight: normal;
+            font-style: normal;
+        }
     }
 }
