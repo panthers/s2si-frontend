@@ -70,4 +70,15 @@ div.full-body-container {
             font-style: normal;
         }
     }
+    
+}
+
+/* Possible UI Bug Fixes of libraries */
+.bpmnProps {
+    .bpp-properties-panel [type=text] {
+        width: calc(100% - 36px);
+    }
+    .bpp-properties-panel [contenteditable] {
+        width: calc(100% - 14px);
+    }
 }

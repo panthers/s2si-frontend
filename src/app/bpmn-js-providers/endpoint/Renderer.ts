@@ -1,6 +1,6 @@
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
-import { append as svgAppend, create as svgCreate } from 'tiny-svg';
+import { append as svgAppend, create as svgCreate, attr as svgAttr, innerSVG } from 'tiny-svg';
 import { GfxDataURL } from '../_gfx/gfx.service';
 
 export class Renderer extends BaseRenderer {
@@ -28,7 +28,20 @@ export class Renderer extends BaseRenderer {
             href: GfxDataURL.endpoint
         });
         svgAppend(parent, gfxSvg);
+        this.elementLabel(parent);
         return gfxSvg;
+    }
+
+    elementLabel(parent) {
+        const text: any = svgCreate('text');
+        svgAttr(text, {
+            x: '0',
+            y: '95',
+            fontFamily: 'Roboto, "Helvetica Neue", sans-serif',
+            fontSize: 12
+        });
+        innerSVG(text, 'Endpoint');
+        svgAppend(parent, text);
     }
 
 }

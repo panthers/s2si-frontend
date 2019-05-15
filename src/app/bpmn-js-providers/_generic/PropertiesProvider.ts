@@ -12,24 +12,27 @@ import idProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/IdProps';
 import nameProps from 'bpmn-js-properties-panel/lib/provider/bpmn/parts/NameProps';
 import { FlowService } from 'src/app/_services/flow.service';
 import { PropsRendererService } from 'src/app/_services/props-renderer.service';
+import { Statics } from 'src/app/_helper/statics';
 
 export class PropertiesProvider extends PropertiesActivator {
 
-    static $inject = ['eventBus', 'bpmnFactory', 'elementRegistry', 'translate'];
+    static $inject = ['eventBus', 'bpmnFactory', 'elementRegistry', 'translate', 'modeling'];
 
     private readonly eventBus: any;
     private readonly bpmnFactory: any;
     private readonly elementRegistry: any;
     private readonly translate: any;
+    private readonly modeling: any;
     private flowService: FlowService;
     private propsRendererService: PropsRendererService;
 
-    constructor(eventBus, bpmnFactory, elementRegistry, translate) {
+    constructor(eventBus, bpmnFactory, elementRegistry, translate, modeling) {
         super(eventBus, 1500);
         this.eventBus = eventBus;
         this.bpmnFactory = bpmnFactory;
         this.elementRegistry = elementRegistry;
         this.translate = translate;
+        this.modeling = modeling;
         this.eventBusListeners();
     }
 
@@ -127,7 +130,8 @@ export class PropertiesProvider extends PropertiesActivator {
 
     // Create the system tab
     createSystemTabGroups(element) {
-        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === 'system') {
+        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === Statics.BPMN_TASK_TYPE_SYSTEM) {
+            this.flowService.getOrCreateExtensionElementsAndDetails(element, Statics.BPMN_SYSTEM_DETAILS, this.bpmnFactory, this.modeling);
             return [
                 {
                     id: 'system-grp',
@@ -137,9 +141,17 @@ export class PropertiesProvider extends PropertiesActivator {
                             id : 'sysref-prop',
                             description : '',
                             label : 'Reference',
-                            modelProperty : 's2si:sysRef',
+                            modelProperty : 'sysref',
                             selectOptions: this.flowService.getSystemsInSyncMode(),
-                            // setControlValue : true
+                            get: (ele, containerElement) => {
+                                const systemDetails = this.flowService
+                                .getExtensionElements(getBusinessObject(ele), Statics.BPMN_SYSTEM_DETAILS);
+                                return { sysref : systemDetails.sysref ? systemDetails.sysref : '' };
+                            },
+                            set: (ele, values, containerElement) => {
+                                return this.flowService
+                                .setDetailAttribute(ele, Statics.BPMN_SYSTEM_DETAILS, 'sysref', values.sysref, this.modeling);
+                            }
                         })
                     ]
                 }
@@ -157,7 +169,7 @@ export class PropertiesProvider extends PropertiesActivator {
             entries: []
         };
         // TODO
-        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === 'endpoint') {
+        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === Statics.BPMN_TASK_TYPE_ENDPOINT) {
             return [ group ];
         } else {
             return [ ];
@@ -166,7 +178,7 @@ export class PropertiesProvider extends PropertiesActivator {
 
     // Create the Polling tab
     createPollingTabGroups(element) {
-        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === 'polling') {
+        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === Statics.BPMN_TASK_TYPE_POLLING) {
             return [
                 {
                     id: 'polling-grp',
@@ -181,7 +193,8 @@ export class PropertiesProvider extends PropertiesActivator {
 
     // Create the queue tab
     createQueueTabGroups(element) {
-        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === 'queue') {
+        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === Statics.BPMN_TASK_TYPE_QUEUE) {
+            this.flowService.getOrCreateExtensionElementsAndDetails(element, Statics.BPMN_QUEUE_DETAILS, this.bpmnFactory, this.modeling);
             return [
                 {
                     id: 'queue-grp',
@@ -191,7 +204,16 @@ export class PropertiesProvider extends PropertiesActivator {
                             id : 'qname-prop',
                             description : '',
                             label : 'Queue Name',
-                            modelProperty : 's2si:queue_name'
+                            modelProperty : 'qname',
+                            get: (ele, containerElement) => {
+                                const queueDetails = this.flowService
+                                .getExtensionElements(getBusinessObject(ele), Statics.BPMN_QUEUE_DETAILS);
+                                return { qname : queueDetails.qname ? queueDetails.qname : '' };
+                            },
+                            set: (ele, values, containerElement) => {
+                                return this.flowService
+                                .setDetailAttribute(ele, Statics.BPMN_QUEUE_DETAILS, 'qname', values.qname, this.modeling);
+                            }
                         })
                     ]
                 }
@@ -203,7 +225,9 @@ export class PropertiesProvider extends PropertiesActivator {
 
     // Create the transformer tab
     createTransformerTabGroups(element) {
-        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === 'transformer') {
+        if (is(element, 'bpmn:Task') && getBusinessObject(element).type === Statics.BPMN_TASK_TYPE_TRANSFORMER) {
+            this.flowService
+            .getOrCreateExtensionElementsAndDetails(element, Statics.BPMN_TRANSFORMER_DETAILS, this.bpmnFactory, this.modeling);
             return [
                 {
                     id: 'transformer-grp',
@@ -213,8 +237,37 @@ export class PropertiesProvider extends PropertiesActivator {
                             id : 'transformertype-prop',
                             description : '',
                             label : 'Type',
-                            modelProperty : 's2si:transformer_type',
-                            selectOptions: this.flowService.getTransformerTypes()
+                            modelProperty : 'type',
+                            selectOptions: this.flowService.getTransformerTypes(),
+                            get: (ele, containerElement) => {
+                                const transformerDetails = this.flowService
+                                .getExtensionElements(getBusinessObject(ele), Statics.BPMN_TRANSFORMER_DETAILS);
+                                return { type : transformerDetails.type ? transformerDetails.type : '' };
+                            },
+                            set: (ele, values, containerElement) => {
+                                return this.flowService
+                                .setDetailAttribute(ele, Statics.BPMN_TRANSFORMER_DETAILS, 'type', values.type, this.modeling);
+                            }
+                        }),
+                        entryFactory.textBox({
+                            id : 'xslt-prop',
+                            description : '',
+                            label : 'XSLT',
+                            modelProperty : 'xslt',
+                            get: (ele, containerElement) => {
+                                return { xslt : this.flowService
+                                    .getDetailText(ele, Statics.BPMN_TRANSFORMER_DETAILS, 'xslt', 's2si:xslt') };
+                            },
+                            set: (ele, values, containerElement) => {
+                                return this.flowService.setDetailText(ele,
+                                    Statics.BPMN_TRANSFORMER_DETAILS, 'xslt',
+                                    's2si:xslt', values.xslt, this.bpmnFactory, this.modeling);
+                            },
+                            show: (ele, containerElement) => {
+                                const transformerDetails = this.flowService
+                                .getExtensionElements(getBusinessObject(ele), Statics.BPMN_TRANSFORMER_DETAILS);
+                                return transformerDetails && transformerDetails.type === 'XSLT';
+                            }
                         })
                     ]
                 }
@@ -229,11 +282,11 @@ export class PropertiesProvider extends PropertiesActivator {
             return [ this.flowInfoGroup() ];
         } else if (is(element, 'bpmn:Task')) {
             switch (getBusinessObject(element).type) {
-                case 'system': return [ this.systemInfoGroup() ];
-                case 'endpoint': return [ this.endpointInfoGroup() ];
-                case 'polling': return [ this.pollingInfoGroup() ];
-                case 'queue': return [ this.queueInfoGroup() ];
-                case 'transformer': return [ this.transformerInfoGroup() ];
+                case Statics.BPMN_TASK_TYPE_SYSTEM: return [ this.systemInfoGroup() ];
+                case Statics.BPMN_TASK_TYPE_ENDPOINT: return [ this.endpointInfoGroup() ];
+                case Statics.BPMN_TASK_TYPE_POLLING: return [ this.pollingInfoGroup() ];
+                case Statics.BPMN_TASK_TYPE_QUEUE: return [ this.queueInfoGroup() ];
+                case Statics.BPMN_TASK_TYPE_TRANSFORMER: return [ this.transformerInfoGroup() ];
             }
             return [ this.flowInfoGroup() ];
         }

@@ -40,31 +40,53 @@ export class FlowService {
             name: 'type',
             isAttr: true,
             type: 'String'
-          },
+          }
+        ]
+      },
+      {
+        name: 'QueueDetails',
+        superClass: [ 'Element' ],
+        properties: [
           {
-            name: 'queue_name',
-            isAttr: true,
-            type: 'String'
-          },
-          {
-            name: 'transformer_type',
-            isAttr: true,
-            type: 'String'
-          },
-          {
-            name: 'transformer_xslt_template',
+            name: 'qname',
             isAttr: true,
             type: 'String'
           }
         ]
       },
       {
-        name: 'QueueAttributes',
+        name: 'SystemDetails',
         superClass: [ 'Element' ],
         properties: [
           {
-            name: 'name',
+            name: 'sysref',
             isAttr: true,
+            type: 'String'
+          }
+        ]
+      },
+      {
+        name: 'TransformerDetails',
+        superClass: [ 'Element' ],
+        properties: [
+          {
+            name: 'type',
+            isAttr: true,
+            type: 'String'
+          },
+          {
+            name: 'xslt',
+            isMany: true,
+            type: 'xslt'
+          }
+        ]
+      },
+      {
+        name: 'xslt',
+        properties: [
+          {
+            name: 'text',
+            isBody: true,
             type: 'String'
           }
         ]
@@ -241,6 +263,117 @@ export class FlowService {
       // Put http code here, until then return empty flow xml
       return this.loadEmptyFlow();
     }
+  }
+
+  /**
+   * Get or Create ExtensionElements and details under the specified element.
+   */
+  getOrCreateExtensionElementsAndDetails(element, type, bpmnFactory, modeling) {
+
+    const bo = element.businessObject;
+    let extensionElements = bo.extensionElements;
+
+    // add extension elements
+    if (!extensionElements) {
+      extensionElements = bpmnFactory.create('bpmn:ExtensionElements', {
+        values: [ bpmnFactory.create(type) ]
+      });
+      modeling.updateProperties(element, {
+        extensionElements
+      });
+    } else {
+      const detail = extensionElements.values.filter((extensionElement) => {
+        return is(extensionElement, type);
+      })[0];
+      if (!detail) {
+        extensionElements.values.push(bpmnFactory.create(type));
+        modeling.updateProperties(element, {
+          extensionElements
+        });
+      }
+    }
+    return extensionElements;
+  }
+
+  /**
+   * Get Extension Element for the specified type.
+   */
+  getExtensionElements(bo, type) {
+    if (!bo.extensionElements) {
+      return;
+    }
+    return bo.extensionElements.values.filter((extensionElement) => {
+      return is(extensionElement, type);
+    })[0];
+  }
+
+  /**
+   * Set Extension Element attribute for the specified type.
+   */
+  setDetailAttribute(ele, type, attr, val, modeling) {
+    const bo = getBusinessObject(ele);
+    if (!bo.extensionElements) {
+      return;
+    }
+    const detail = bo.extensionElements.values.filter((extensionElement) => {
+      return is(extensionElement, type);
+    })[0];
+    if (!detail) {
+      return;
+    }
+    detail[attr] = val;
+    modeling.updateProperties(ele, {
+      extensionElements: bo.extensionElements
+    });
+  }
+
+  /**
+   * Set Extension Element text value for the specified type.
+   */
+  setDetailText(ele, type, node, nodeType, val, bpmnFactory, modeling) {
+    const bo = getBusinessObject(ele);
+    if (!bo.extensionElements) {
+      return;
+    }
+    const detail = bo.extensionElements.values.filter((extensionElement) => {
+      return is(extensionElement, type);
+    })[0];
+    if (!detail) {
+      return;
+    }
+    detail[node] = [
+      bpmnFactory.create(nodeType, { text: val })
+    ];
+    modeling.updateProperties(ele, {
+      extensionElements: bo.extensionElements
+    });
+  }
+
+  /**
+   * Set Extension Element text value for the specified type.
+   */
+  getDetailText(ele, type, node, nodeType) {
+    const text = '';
+    const bo = getBusinessObject(ele);
+    if (!bo.extensionElements) {
+      return text;
+    }
+    const detail = bo.extensionElements.values.filter((extensionElement) => {
+      return is(extensionElement, type);
+    })[0];
+    if (!detail) {
+      return text;
+    }
+    if (!detail[node]) {
+      return text;
+    }
+    const textEle = detail[node].filter((nd) => {
+      return is(nd, nodeType);
+    })[0];
+    if (!textEle) {
+      return text;
+    }
+    return textEle.text;
   }
 
   /**
